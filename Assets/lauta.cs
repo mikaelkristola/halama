@@ -7,6 +7,7 @@ public class lauta : MonoBehaviour
 {
     //Vector2 ernesti;
     public Knappula tälläHetkelläRaijattavaKnappula;
+    public GameObject tähtäin;
 
     // Start is called before the first frame update
     void Start()
@@ -38,10 +39,12 @@ public class lauta : MonoBehaviour
     private mesta mestaJohonOllaanHyppäämääsillään;
     private Vector2 pisteJohnaHiiriMeniAlaha;
 
+    public int[] rivit;
+
     //[ContextMenu("tee mestat")]
     private void OnValidate()
     {
-        int[] rivit=new int[17];
+        rivit = new int[17];
 
         rivit[0] = 1;
         rivit[1] = 2;
@@ -82,6 +85,8 @@ public class lauta : MonoBehaviour
                                     mestat.Add(spede.GetComponent<mesta>());
                                 }
                                 mestat[reiska].transform.position = new Vector3(b * välimatka_x-a*välimatka_x/2+x_alootus, monesko_rivi * välimatka_y+y_alootus, -1);
+                                mestat[reiska].rivinumero = monesko_rivi;
+    
 
                 mestat[reiska].GetComponent<SpriteRenderer>().enabled = false;
 
@@ -150,6 +155,8 @@ public class lauta : MonoBehaviour
                     tälläHetkelläRaijattavaKnappula.transform.position + new Vector3(heikki.x, heikki.y, 0f));
             }
 
+            tähtäin.transform.position = new Vector3(-10f, 0f, 0f);
+
             täsKohorasOnKnappula = täsKohorasOlevatTavarat.Any(coll => coll.GetComponent<Knappula>() != null);
             if (!täsKohorasOnKnappula)
             {
@@ -159,14 +166,11 @@ public class lauta : MonoBehaviour
                     if (mst && raijausSuunta.magnitude > 0.5f)
                     {
                         mestaJohonOllaanHyppäämääsillään = mst;
-                        Debug.DrawLine(
-                            mst.transform.position - new Vector3(0.3f, 0, 0),
-                            mst.transform.position + new Vector3(0.3f, 0, 0), Color.red);
-                        Debug.DrawLine(
-                            mst.transform.position - new Vector3(0, 0.3f, 0),
-                            mst.transform.position + new Vector3(0, 0.3f, 0), Color.red);
 
-
+                        tähtäin.transform.position = new Vector3(
+                            mst.transform.position.x,
+                            mst.transform.position.y,
+                            tähtäin.transform.position.z);
                     }
                 }
             }
@@ -179,6 +183,9 @@ public class lauta : MonoBehaviour
             {
                 // Paa knappula uuteen paikkaan
                 tälläHetkelläRaijattavaKnappula.transform.position = mestaJohonOllaanHyppäämääsillään.transform.position;
+                tälläHetkelläRaijattavaKnappula.tämänhetkinenRivinumero = mestaJohonOllaanHyppäämääsillään.rivinumero;
+                FindObjectOfType<KnappuloidenMääränLaskin>().LaskeKnappuloidenMäärä();
+                FindObjectOfType<SiirtojenMääränLaskin>().TehtiinSiirto();
             }
             tälläHetkelläRaijattavaKnappula = null;
             mestaJohonOllaanHyppäämääsillään = null;

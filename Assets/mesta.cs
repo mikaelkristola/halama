@@ -8,6 +8,7 @@ public class mesta : MonoBehaviour
     public Vector3 erootus;
     public int uusien_lukumaara;
     public Transform perimmäänen;
+    public int rivinumero;
 
     // Start is called before the first frame update
     void Start()

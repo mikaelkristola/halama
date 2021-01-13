@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Knappula : MonoBehaviour
 {
+    public int tämänhetkinenRivinumero;
+
     // Start is called before the first frame update
     void Start()
     {
