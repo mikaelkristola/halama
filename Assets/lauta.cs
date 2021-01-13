@@ -35,8 +35,7 @@ public class lauta : MonoBehaviour
     public float x_alootus = 0;
 
     private mesta mestaJohonOllaanHyppäämääsillään;
-
-//    private List<Vector2> össi = new List<Vector2>();
+    private Vector2 pisteJohnaHiiriMeniAlaha;
 
     //[ContextMenu("tee mestat")]
     private void OnValidate()
@@ -120,15 +119,14 @@ public class lauta : MonoBehaviour
                 if (knappula)
                 {
                     tälläHetkelläRaijattavaKnappula = knappula;
+                    pisteJohnaHiiriMeniAlaha = mouseWorld;
                 }
             }
         }
 
         if (Input.GetMouseButton(0) && tälläHetkelläRaijattavaKnappula != null)
         {
-            Vector2 raijausSuunta = mouseWorld - new Vector2(
-                tälläHetkelläRaijattavaKnappula.transform.position.x,
-                tälläHetkelläRaijattavaKnappula.transform.position.y);
+            Vector2 raijausSuunta = mouseWorld - pisteJohnaHiiriMeniAlaha;
             //int taneli = KulmaJohonaPäinNappulaOn(raijausSuunta);
             float taneli = Mathf.Round(Mathf.Atan2(raijausSuunta.y, raijausSuunta.x) / Mathf.PI * 3f) / 3f * Mathf.PI;
             //Debug.Log(Mathf.Round(Mathf.Atan2(raijausSuunta.y, raijausSuunta.x) / Mathf.PI * 3f) / 3f * Mathf.PI * Mathf.Rad2Deg);
