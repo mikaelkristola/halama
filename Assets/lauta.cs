@@ -141,7 +141,7 @@ public class lauta : MonoBehaviour
                 tälläHetkelläRaijattavaKnappula.transform.position + new Vector3(heikki.x, heikki.y, 0f)))
             {
                 mesta mst = coll.GetComponent<mesta>();
-                if (mst)
+                if (mst && raijausSuunta.magnitude > 0.5f)
                 {
                     mestaJohonOllaanHyppäämääsillään = mst;
                     Debug.DrawLine(
