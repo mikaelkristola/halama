@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class lauta : MonoBehaviour
@@ -137,22 +138,38 @@ public class lauta : MonoBehaviour
             heikki.y = Mathf.Sin(taneli);
             heikki *= välimatka_x;
 
-            foreach (Collider2D coll in Physics2D.OverlapPointAll(
-                tälläHetkelläRaijattavaKnappula.transform.position + new Vector3(heikki.x, heikki.y, 0f)))
+            Collider2D[] täsKohorasOlevatTavarat = Physics2D.OverlapPointAll(
+                tälläHetkelläRaijattavaKnappula.transform.position + new Vector3(heikki.x, heikki.y, 0f));
+
+            bool täsKohorasOnKnappula = täsKohorasOlevatTavarat.Any(coll => coll.GetComponent<Knappula>() != null);
+            if (täsKohorasOnKnappula)
             {
-                mesta mst = coll.GetComponent<mesta>();
-                if (mst && raijausSuunta.magnitude > 0.5f)
+                // Täs kohoras on knappula joten yritäkkin raijjata kaks kertaa kauemmas ja hypätä olemas olevan knappulan yli
+                heikki *= 2;
+                täsKohorasOlevatTavarat = Physics2D.OverlapPointAll(
+                    tälläHetkelläRaijattavaKnappula.transform.position + new Vector3(heikki.x, heikki.y, 0f));
+            }
+
+            täsKohorasOnKnappula = täsKohorasOlevatTavarat.Any(coll => coll.GetComponent<Knappula>() != null);
+            if (!täsKohorasOnKnappula)
+            {
+                foreach (Collider2D coll in täsKohorasOlevatTavarat)
                 {
-                    mestaJohonOllaanHyppäämääsillään = mst;
-                    Debug.DrawLine(
-                        mst.transform.position - new Vector3(0.3f, 0, 0),
-                        mst.transform.position + new Vector3(0.3f, 0, 0), Color.red);
-                    Debug.DrawLine(
-                        mst.transform.position - new Vector3(0, 0.3f, 0),
-                        mst.transform.position + new Vector3(0, 0.3f, 0), Color.red);
+                    mesta mst = coll.GetComponent<mesta>();
+                    if (mst && raijausSuunta.magnitude > 0.5f)
+                    {
+                        mestaJohonOllaanHyppäämääsillään = mst;
+                        Debug.DrawLine(
+                            mst.transform.position - new Vector3(0.3f, 0, 0),
+                            mst.transform.position + new Vector3(0.3f, 0, 0), Color.red);
+                        Debug.DrawLine(
+                            mst.transform.position - new Vector3(0, 0.3f, 0),
+                            mst.transform.position + new Vector3(0, 0.3f, 0), Color.red);
+
+
+                    }
                 }
             }
-          
         }
 
 
